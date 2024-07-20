@@ -1,5 +1,4 @@
 import { ApiRepsonse } from "@/types/ApiResponse";
-import { resend } from "./resend";
 import VerificationEmail from "./emails/verificationEmail";
 import nodemailer from "nodemailer";
 
@@ -15,17 +14,25 @@ export const sendVerificationEmail = async ({
   verifyCode,
 }: verificationEmailProps) => {
   try {
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      service: "Gmail",
-      port: 587,
-      secure: false, // Use `true` for port 465, `false` for all other ports
-      auth: {
-        user: process.env.NEXT_PUBLIC_USER,
-        pass: process.env.NEXT_PUBLIC_PASS,
-      },
-    })
+    // const transporter = nodemailer.createTransport({
+    //   host: "smtp.gmail.com",
+    //   service: "Gmail",
+    //   port: 587,
+    //   secure: false, // Use `true` for port 465, `false` for all other ports
+    //   auth: {
+    //     user: process.env.NEXT_PUBLIC_USER,
+    //     pass: process.env.NEXT_PUBLIC_PASS,
+    //   },
+    // })
 
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.ethereal.email',
+      port: 587,
+      auth: {
+          user: 'robyn.kuvalis@ethereal.email',
+          pass: 'jdGDvfCc4M5yPN7n5z'
+      }
+    });
     
     const info = await transporter.sendMail({
         from: 'bansalcb2021@gmail.com',

@@ -22,7 +22,8 @@ const page = () => {
   const [messages, setMessages] = useState<any>([]);
 
 
-  const baseUrl = `${window.location.protocol}//${window.location.host}`;
+  // const baseUrl = `${window?.location?.protocol}//${window?.location?.host}`;
+  const baseUrl = typeof window !== 'undefined' ? `${window.location.protocol}//${window.location.host}` : '';
 
   const fetchMessages = useCallback(
     async (refresh: boolean = false) => {

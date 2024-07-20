@@ -1,5 +1,4 @@
 import { ApiRepsonse } from "@/types/ApiResponse";
-import { resend } from "./resend";
 import resetPasswordEmail from "./emails/resetPasswordEmail";
 import bcrypt from "bcryptjs";
 import User from "./models";

@@ -8,13 +8,10 @@ import { Trash} from 'lucide-react'
 import { ApiRepsonse } from '@/types/ApiResponse';
 import { toast } from 'sonner';
 
-interface MessageCardProps {
-  message: Message,
-  onMessageDelete: (messageId: string)=>void
-}
 
 
-const MessageCard = ({message,onMessageDelete}: MessageCardProps) => {
+
+const MessageCard = ({message,onMessageDelete}: any) => {
 
   const handleMessageDelete = async()=>{
     try {

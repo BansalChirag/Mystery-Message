@@ -9,12 +9,12 @@ export interface UserInterface {
   username: string;
   email: string;
   password: string;
-  verifyCode?: string;
-  verifyCodeExpiry?: Date;
+  verifyCode: string;
+  verifyCodeExpiry: Date;
   isVerified: boolean;
   isAcceptingMessages: boolean;
-  forgotPasswordToken?: string;
-  forgotPasswordTokenExpiry?: Date;
+  forgotPasswordToken: string;
+  forgotPasswordTokenExpiry: Date;
   messages: Message[];
 }
 
