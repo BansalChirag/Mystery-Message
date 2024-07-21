@@ -48,14 +48,13 @@ export async function GET(request: NextRequest) {
   if (!result.success) {
     return NextResponse.json({
       success: false,
-      message: "Invalid username",
+      message: result?.error?.errors[0].message,
     });
   }
 
   const username = queryParams.username;
 
   const users = await User.find({ verifyCodeExpiry: { $lt: Date.now() } }, { username: 1 });
-  console.log("🚀 ~ GET ~ users:", users)
   const existingVerifiedUser = users?.find(
     (user) => user.username === username
   );
