@@ -18,13 +18,13 @@ import { signIn, useSession } from "next-auth/react";
 import CardWrapper from "@/components/common/card-wrapper";
 import Link from "next/link";
 import { toast } from "sonner";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, UserRound } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCurrentUser } from "@/hooks";
 
 const LoginForm = () => {
   // zod implementation
-  const {data: session} = useSession();
+  const { data: session } = useSession();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -49,6 +49,27 @@ const LoginForm = () => {
       if (response?.error === null) {
         toast.success("Login Successfully.");
         form.reset();
+        router.replace("/dashboard");
+      } else if (response?.error) {
+        toast.error(response?.error?.split(":")[1] as string);
+      }
+    } catch (error: any) {
+      toast.error(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleGuestLogin = async () => {
+    setIsSubmitting(true);
+    try {
+      const response = await signIn("credentials", {
+        redirect: false,
+        identifier: "guest@example.com", // Replace with your actual guest account email
+        password: "GuestPassword123!", // Replace with your actual guest account password
+      });
+      if (response?.error === null) {
+        toast.success("Guest Login Successful.");
         router.replace("/dashboard");
       } else if (response?.error) {
         toast.error(response?.error?.split(":")[1] as string);
@@ -119,13 +140,30 @@ const LoginForm = () => {
               </Link> */}
             <div className="w-full flex items-center justify-end mt-2 ml-2">
               {/* <Button variant="link"> */}
-                <Link href="forgot-password">Forgot Password?</Link>
+              <Link href="forgot-password">Forgot Password?</Link>
               {/* </Button> */}
             </div>
           </div>
           <Button className="w-full" disabled={isSubmitting}>
             {isSubmitting ? "Please wait..." : "Login"}
           </Button>
+          <div className="my-4 flex items-center justify-center">
+            <div className="border-t border-gray-300 w-2/3"></div>
+            <span className="mx-2 text-gray-500">or</span>
+            <div className="border-t border-gray-300 w-2/3"></div>
+          </div>
+          <div className="w-full flex items-center justify-center mt-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleGuestLogin}
+              disabled={isSubmitting}
+              className="w-full flex items-center justify-center"
+            >
+              <UserRound className="mr-2 h-4 w-4" />
+              {isSubmitting ? "Logging in..." : "Login as Guest"}
+            </Button>
+          </div>
         </form>
       </Form>
     </CardWrapper>
