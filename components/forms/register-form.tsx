@@ -24,10 +24,12 @@ import { ApiRepsonse } from "@/types/ApiResponse";
 
 const RegisterForm = () => {
   const [username, setUsername] = useState<string>("");
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [usernameMessage, setUsernameMessage] = useState<string>("");
   const [isCheckingUsername, setIsCheckingUsername] = useState<boolean>(false);
+
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const [suggestedUsernames, setSuggestedUsernames] = useState<string[]>([]);
@@ -69,7 +71,7 @@ const RegisterForm = () => {
 
   const debouncedCheckUsernameUnique = useDebounceCallback(
     async (username: string) => {
-      if (username && isApiCall) {
+      if (username.length >= 3 && isApiCall) {
         setIsCheckingUsername(true);
         setUsernameMessage(""); // Reset message
         try {
@@ -143,6 +145,7 @@ const RegisterForm = () => {
                       <Loader2 className="absolute right-2 top-2 animate-spin" />
                     ) : form.formState.errors.username ? null : (
                       username.length >= 3 &&
+                      !isCheckingUsername &&
                       usernameMessage === "Username is unique" && (
                         <CheckCircledIcon className="text-green-500 mt-2 mr-2 h-5 w-5" />
                       )
@@ -158,6 +161,14 @@ const RegisterForm = () => {
                     ""
                   ))}
 
+                {username.length > 0 && username.length < 3 ? (
+                  <p className="text-red-600">
+                    Username must be at least 3 characters
+                  </p>
+                ) : (
+                  ""
+                )}
+
                 {suggestedUsernames?.length > 0 && (
                   <div
                     className="flex flex-col overflow-y-auto max-h-20 scrollbar-hide"
@@ -169,7 +180,8 @@ const RegisterForm = () => {
                         className="flex items-center justify-between py-2 px-4 hover:bg-gray-100 cursor-pointer"
                         onClick={() => {
                           setIsApiCall(false);
-                          // setUsername(suggestedUsername);
+                          setUsernameMessage("");
+                          setUsername(suggestedUsername);
                           form.setValue("username", suggestedUsername);
                           setSuggestedUsernames([]);
                         }}
